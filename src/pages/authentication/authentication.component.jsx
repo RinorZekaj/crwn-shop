@@ -1,12 +1,14 @@
 import React from 'react'
 import SignIn from '../../components/sign-in/sign-in.component'
+import SignUp from '../../components/sign-up/sign-up.component'
 
 import './authentication.styles.scss'
 
 function Authentication() {
   return (
-    <div>
+    <div className='authentication'>
       <SignIn />
+      <SignUp />
     </div>
   )
 }

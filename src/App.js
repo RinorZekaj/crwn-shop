@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 
 import "./App.css";
 import Header from "./components/header/header.component";
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import Authentication from "./pages/authentication/authentication.component";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
@@ -15,10 +15,20 @@ function App() {
   let unsubcribeFromAuth = null;
 
   useEffect(() => {
-    unsubcribeFromAuth = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
+    unsubcribeFromAuth = auth.onAuthStateChanged(async(userAuth) => {
+      if(userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
 
-      console.log(user);
+        userRef.onSnapshot(snapShot => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
+          })   
+
+          console.log(currentUser);
+        })
+      }
+      setCurrentUser(userAuth)
     });
     return () => {
       unsubcribeFromAuth();
