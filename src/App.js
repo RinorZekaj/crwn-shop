@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.css";
@@ -10,7 +10,7 @@ import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import { setCurrentUser } from "./redux/user/user.actions";
 
-function App({ setCurrentUser }) {
+function App({ setCurrentUser, currentUser }) {
   let unsubcribeFromAuth = null;
 
   useEffect(() => {
@@ -38,14 +38,24 @@ function App({ setCurrentUser }) {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />
-        <Route path="/signIn" component={Authentication} />
+        <Route
+          exact
+          path="/signIn"
+          render={() =>
+            currentUser ? <Redirect to="/" /> : <Authentication />
+          }
+        />
       </Switch>
     </div>
   );
 }
 
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
