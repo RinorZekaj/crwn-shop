@@ -1,19 +1,29 @@
 import React from "react";
 import { connect } from "react-redux";
-import { clearItemFromCart, removeItem, addItem } from "../../redux/cart/cart.actions";
+import {
+  clearItemFromCart,
+  removeItem,
+  addItem,
+} from "../../redux/cart/cart.actions";
 
-import "./checkout-item.styles.scss";
+import {
+  CheckOutItemContainer,
+  ImageContainer,
+  TextConainer,
+  RemoveButtonContainer,
+  QuantityContainer,
+} from "./checkout-item.styles";
 
 function CheckoutItem({ cartItem, clearItem, addItem, deleteItem }) {
   const { name, imageUrl, price, quantity } = cartItem;
 
   return (
-    <div className="checkout-item">
-      <div className="image-container">
+    <CheckOutItemContainer>
+      <ImageContainer>
         <img src={imageUrl} alt="item" />
-      </div>
-      <span className="name">{name}</span>
-      <span className="quantity">
+      </ImageContainer>
+      <TextConainer>{name}</TextConainer>
+      <QuantityContainer>
         <div className="arrow" onClick={() => deleteItem(cartItem)}>
           &#10094;
         </div>
@@ -21,12 +31,12 @@ function CheckoutItem({ cartItem, clearItem, addItem, deleteItem }) {
         <div className="arrow" onClick={() => addItem(cartItem)}>
           &#10095;
         </div>
-      </span>
-      <span className="price">{price}</span>
-      <div className="remove-button" onClick={() => clearItem(cartItem)}>
+      </QuantityContainer>
+      <TextConainer>{price}</TextConainer>
+      <RemoveButtonContainer onClick={() => clearItem(cartItem)}>
         &#10005;
-      </div>
-    </div>
+      </RemoveButtonContainer>
+    </CheckOutItemContainer>
   );
 }
 
